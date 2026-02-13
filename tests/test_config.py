@@ -269,4 +269,13 @@ class TestFindWatchlist:
 
     def test_default_when_nothing_exists(self, tmp_path: Path, monkeypatch):
         monkeypatch.chdir(tmp_path)
-        assert find_watchlist() == "watchlist.yaml"
+        with pytest.raises(FileNotFoundError, match="No watchlist.yaml found"):
+            find_watchlist()
+
+    def test_auto_copy_from_example(self, tmp_path: Path, monkeypatch):
+        monkeypatch.chdir(tmp_path)
+        (tmp_path / "watchlist.example.yaml").write_text("vendors:\n  - microsoft\n")
+        result = find_watchlist()
+        assert result == "watchlist.yaml"
+        assert (tmp_path / "watchlist.yaml").exists()
+        assert "microsoft" in (tmp_path / "watchlist.yaml").read_text()

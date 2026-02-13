@@ -5,6 +5,7 @@ Replaces the old ``Watchlist`` dataclass and ``load_watchlist()`` /
 """
 
 import json
+import shutil
 from pathlib import Path
 from typing import Any
 
@@ -229,13 +230,37 @@ def load_merged_watchlist(
 
 
 def find_watchlist() -> str:
-    """Find the watchlist file, preferring YAML over JSON.
+    """Find the watchlist file, auto-creating from example if needed.
+
+    Searches for ``watchlist.yaml``, ``watchlist.yml``, or
+    ``watchlist.json`` in the current directory.  If none exist but
+    ``watchlist.example.yaml`` is present, it is copied to
+    ``watchlist.yaml`` and the user is informed.
 
     Returns:
-        Filename of the first existing watchlist file, or
-        ``"watchlist.yaml"`` as a default.
+        Filename of the first existing watchlist file, or the
+        newly created ``watchlist.yaml``.
+
+    Raises:
+        FileNotFoundError: if no watchlist can be found or created.
     """
     for name in ("watchlist.yaml", "watchlist.yml", "watchlist.json"):
         if Path(name).exists():
             return name
-    return "watchlist.yaml"
+
+    # Auto-copy from example on first run
+    example = Path("watchlist.example.yaml")
+    target = Path("watchlist.yaml")
+    if example.exists():
+        shutil.copy(example, target)
+        print(
+            f"⚡ Created {target} from {example}\n"
+            f"   Edit it to match your environment, then re-run.\n"
+            f"   Docs: docs/configuration.md"
+        )
+        return str(target)
+
+    raise FileNotFoundError(
+        "No watchlist.yaml found and no watchlist.example.yaml to copy from.\n"
+        "Create one — see docs/configuration.md for the full reference."
+    )

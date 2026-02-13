@@ -9,16 +9,19 @@ Thanks for your interest in contributing! VulnRadar is designed to be easy to ex
 git clone https://github.com/YOUR_USERNAME/VulnRadar.git
 cd VulnRadar
 
-# Install dependencies (including dev tools)
-pip install -r requirements.txt
-pip install -r requirements-dev.txt
+# Install everything (runtime + dev deps + pre-commit hooks) in one command
+make dev
+
+# Or manually:
+pip install -e ".[dev]"
+pre-commit install
 
 # Run the test suite
-python -m pytest tests/ -v
+make test
 
-# Run linting
-ruff check vulnradar/ tests/
-ruff format --check vulnradar/ tests/
+# Run linting & formatting
+make lint
+make fmt
 ```
 
 ## Project Structure
