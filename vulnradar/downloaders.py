@@ -22,6 +22,7 @@ import requests
 from tenacity import retry, stop_after_attempt, wait_exponential
 
 GITHUB_LATEST_RELEASE_API = "https://api.github.com/repos/CVEProject/cvelistV5/releases/latest"
+GITHUB_RELEASES_API = "https://api.github.com/repos/CVEProject/cvelistV5/releases?per_page=5"
 CISA_KEV_URL = "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json"
 EPSS_CURRENT_CSV_GZ_URL = "https://epss.empiricalsecurity.com/epss_scores-current.csv.gz"
 PATCHTHIS_CSV_URL = "https://raw.githubusercontent.com/RogoLabs/patchthisapp/main/web/data.csv"
@@ -92,20 +93,8 @@ def download_bytes(session: requests.Session, url: str) -> bytes:
 # ─────────────────────────────────────────────────────────────────────────────
 
 
-def get_latest_cvelist_zip_url(session: requests.Session) -> str:
-    """Resolve the download URL for the latest CVE List V5 bulk export.
-
-    Args:
-        session: Requests session.
-
-    Returns:
-        Browser download URL for the ZIP asset.
-
-    Raises:
-        RuntimeError: If no suitable asset is found.
-    """
-    data = get_json(session, GITHUB_LATEST_RELEASE_API)
-    assets = data.get("assets") or []
+def _find_midnight_zip_in_assets(assets: list[dict[str, Any]]) -> str | None:
+    """Return the midnight-ZIP download URL from a release asset list, or None."""
     for asset in assets:
         name = asset.get("name") or ""
         if re.search(r"_all_CVEs_at_midnight\.zip(\.zip)?$", name):
@@ -118,7 +107,43 @@ def get_latest_cvelist_zip_url(session: requests.Session) -> str:
             url = asset.get("browser_download_url")
             if url:
                 return url
-    raise RuntimeError("Could not find *_all_CVEs_at_midnight.zip asset in latest release")
+    return None
+
+
+def get_latest_cvelist_zip_url(session: requests.Session) -> str:
+    """Resolve the download URL for the latest CVE List V5 bulk export.
+
+    The upstream CVEProject/cvelistV5 repository publishes hourly delta
+    releases *and* an ``at_end_of_day`` release that does **not** contain
+    the midnight bulk ZIP.  When the GitHub ``/releases/latest`` endpoint
+    happens to return one of those releases, this function falls back to
+    scanning the most recent releases until it finds an asset whose name
+    matches ``*_all_CVEs_at_midnight.zip``.
+
+    Args:
+        session: Requests session.
+
+    Returns:
+        Browser download URL for the ZIP asset.
+
+    Raises:
+        RuntimeError: If no suitable asset is found in the latest releases.
+    """
+    # Fast path: check the single "latest" release first.
+    data = get_json(session, GITHUB_LATEST_RELEASE_API)
+    url = _find_midnight_zip_in_assets(data.get("assets") or [])
+    if url:
+        return url
+
+    # Fallback: scan the most recent releases (covers at_end_of_day and
+    # transient asset-upload race conditions).
+    releases = get_json(session, GITHUB_RELEASES_API)
+    for release in releases:
+        url = _find_midnight_zip_in_assets(release.get("assets") or [])
+        if url:
+            return url
+
+    raise RuntimeError("Could not find *_all_CVEs_at_midnight.zip asset in latest releases")
 
 
 def download_and_extract_zip(zip_bytes: bytes) -> Path:

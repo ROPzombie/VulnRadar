@@ -4,10 +4,16 @@ VulnRadar aggregates vulnerability intelligence from five authoritative sources,
 
 ## CVE List V5 (CVEProject/cvelistV5)
 
-- **Primary CVE data source** - descriptions, affected products, basic CVSS
+- **Primary CVE data source** — descriptions, affected products, basic CVSS
 - Uses the GitHub Releases API to locate the latest asset ending in `_all_CVEs_at_midnight.zip`
-- URL: `https://api.github.com/repos/CVEProject/cvelistV5/releases/latest`
+- Primary URL: `https://api.github.com/repos/CVEProject/cvelistV5/releases/latest`
+- Fallback URL: `https://api.github.com/repos/CVEProject/cvelistV5/releases?per_page=5`
 - No NVD API is used
+
+> **Note:** The upstream repo publishes an `at_end_of_day` release each night
+> that does *not* contain the midnight bulk ZIP. VulnRadar automatically falls
+> back to scanning the 5 most recent releases when the `latest` endpoint
+> returns one of these releases.
 
 ## CISA KEV (Known Exploited Vulnerabilities)
 

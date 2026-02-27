@@ -25,6 +25,7 @@ Create/maintain these pages (filenames below match the stub files in this folder
 9. `security.md`
 10. `faq.md`
 11. `contributing.md`
+12. `../CHANGELOG.md` — release history ([Keep a Changelog](https://keepachangelog.com/) format)
 
 ## Roadmap (What to Write, In Order)
 

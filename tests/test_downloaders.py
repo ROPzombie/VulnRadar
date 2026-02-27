@@ -69,11 +69,22 @@ class TestGetLatestCvelistZipUrl:
         assert url == "https://example.com/cves.zip"
 
     def test_no_matching_asset_raises(self):
-        mock_session = MagicMock()
-        mock_session.get.return_value.json.return_value = {
+        """Raises when neither latest nor recent releases have a midnight zip."""
+        no_midnight = MagicMock()
+        no_midnight.json.return_value = {
             "assets": [{"name": "random.txt", "browser_download_url": "https://x.com/r.txt"}]
         }
-        mock_session.get.return_value.raise_for_status = MagicMock()
+        no_midnight.raise_for_status = MagicMock()
+
+        # Second call returns a list of releases, also without midnight zips
+        releases_resp = MagicMock()
+        releases_resp.json.return_value = [
+            {"assets": [{"name": "delta.zip", "browser_download_url": "https://x.com/d.zip"}]},
+        ]
+        releases_resp.raise_for_status = MagicMock()
+
+        mock_session = MagicMock()
+        mock_session.get.side_effect = [no_midnight, releases_resp]
         with pytest.raises(RuntimeError, match="Could not find"):
             get_latest_cvelist_zip_url(mock_session)
 
@@ -90,6 +101,57 @@ class TestGetLatestCvelistZipUrl:
         mock_session.get.return_value.raise_for_status = MagicMock()
         url = get_latest_cvelist_zip_url(mock_session)
         assert url == "https://example.com/double.zip"
+
+    def test_fallback_to_recent_releases(self):
+        """When 'latest' is an at_end_of_day release (no midnight zip),
+        fall back to searching recent releases."""
+        # First call: /releases/latest returns the at_end_of_day release
+        latest_resp = MagicMock()
+        latest_resp.json.return_value = {
+            "assets": [
+                {
+                    "name": "2026-02-26_delta_CVEs_at_end_of_day.zip",
+                    "browser_download_url": "https://example.com/eod.zip",
+                },
+                {
+                    "name": "release_notes.md",
+                    "browser_download_url": "https://example.com/notes.md",
+                },
+            ]
+        }
+        latest_resp.raise_for_status = MagicMock()
+
+        # Second call: /releases?per_page=5 returns several releases
+        releases_resp = MagicMock()
+        releases_resp.json.return_value = [
+            {
+                "assets": [
+                    {
+                        "name": "2026-02-26_delta_CVEs_at_end_of_day.zip",
+                        "browser_download_url": "https://example.com/eod.zip",
+                    },
+                ]
+            },
+            {
+                "assets": [
+                    {
+                        "name": "2026-02-26_all_CVEs_at_midnight.zip.zip",
+                        "browser_download_url": "https://example.com/midnight.zip",
+                    },
+                    {
+                        "name": "2026-02-26_delta_CVEs_at_0000Z.zip",
+                        "browser_download_url": "https://example.com/delta.zip",
+                    },
+                ]
+            },
+        ]
+        releases_resp.raise_for_status = MagicMock()
+
+        mock_session = MagicMock()
+        mock_session.get.side_effect = [latest_resp, releases_resp]
+
+        url = get_latest_cvelist_zip_url(mock_session)
+        assert url == "https://example.com/midnight.zip"
 
 
 # ── download_and_extract_zip ─────────────────────────────────────────────────
