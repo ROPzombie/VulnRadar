@@ -29,7 +29,9 @@ from .downloaders import (
 from .enrichment import (
     build_radar_data,
     extract_all_vendors_products,
+    load_vendor_split,
     write_radar_data,
+    write_vendor_split,
 )
 from .notifications import load_providers
 from .notifications.github_issues import GitHubIssueProvider
@@ -180,6 +182,10 @@ def main_etl(argv: Sequence[str] | None = None) -> int:
     parser.add_argument("--validate-watchlist", action="store_true")
     # Search command
     parser.add_argument("--search", default=None, metavar="QUERY", help="Fuzzy search vendors/products")
+    parser.add_argument(
+        "--vendor-split", action="store_true",
+        help="Also write per-vendor JSON files under data/vendors/",
+    )
     args = parser.parse_args(argv)
 
     # Discovery commands
@@ -266,7 +272,13 @@ def main_etl(argv: Sequence[str] | None = None) -> int:
         shutil.rmtree(extracted, ignore_errors=True)
 
     items = items or []
-    write_radar_data(Path(args.out), items)
+    out_path = Path(args.out)
+    write_radar_data(out_path, items)
+
+    if args.vendor_split:
+        index = write_vendor_split(out_path.parent, items)
+        n_vendors = index["vendor_count"]
+        print(f"Wrote vendor split: {n_vendors} files under {out_path.parent / 'vendors/'}")
 
     state_path = Path(args.state) if args.state else None
     write_markdown_report(Path(args.report), items, state_file=state_path)
@@ -331,6 +343,14 @@ def _generate_demo_cve() -> dict[str, Any]:
 
 
 def _load_items(path: Path) -> list[dict[str, Any]]:
+    # Support loading from a vendor-split directory via radar_index.json
+    if path.is_dir():
+        index_file = path / "radar_index.json"
+        if index_file.exists():
+            return load_vendor_split(path)
+    if path.name == "radar_index.json" and path.exists():
+        return load_vendor_split(path.parent)
+
     with path.open("r", encoding="utf-8") as f:
         payload = json.load(f)
     if isinstance(payload, dict) and isinstance(payload.get("items"), list):
@@ -501,8 +521,15 @@ def main_notify() -> int:
     )
 
     if is_first_run and len(candidates) > 5:
-        print(f"\n🚀 First run detected! Creating baseline summary instead of {len(candidates)} individual issues.")
-        gh.send_baseline(items, candidates, repo, vendors=wl.vendors, products=wl.products)
+        # KEV + watchlist items get individual alerts even on first run
+        kev_watchlist = [c for c in candidates if c.get("active_threat") and c.get("in_watchlist")]
+        baseline_only = [c for c in candidates if not (c.get("active_threat") and c.get("in_watchlist"))]
+        if baseline_only:
+            print(f"\n🚀 First run detected! Creating baseline summary for {len(baseline_only)} items.")
+            gh.send_baseline(items, baseline_only, repo, vendors=wl.vendors, products=wl.products)
+        if kev_watchlist:
+            print(f"\n⚠️  Sending {len(kev_watchlist)} individual alerts for KEV + watchlist items.")
+            created, escalated = gh.send_all(kev_watchlist, changes_by_cve, dry_run=args.dry_run)
     else:
         created, escalated = gh.send_all(candidates, changes_by_cve, dry_run=args.dry_run)
 
@@ -523,8 +550,30 @@ def main_notify() -> int:
         print(f"Sending {name} notifications...")
         try:
             if is_first_run and len(candidates) > 5:
-                provider.send_baseline(items, candidates, repo, vendors=wl.vendors, products=wl.products)
-                print(f"Sent {name} baseline summary (first run).")
+                kev_watchlist = [c for c in candidates if c.get("active_threat") and c.get("in_watchlist")]
+                baseline_only = [c for c in candidates if not (c.get("active_threat") and c.get("in_watchlist"))]
+                if baseline_only:
+                    provider.send_baseline(items, baseline_only, repo, vendors=wl.vendors, products=wl.products)
+                    print(f"Sent {name} baseline summary (first run, {len(baseline_only)} items).")
+                # KEV + watchlist items get individual alerts even on first run
+                if kev_watchlist:
+                    max_per_provider = getattr(args, f"{name}_max", 10)
+                    sent = 0
+                    for it in kev_watchlist[:max_per_provider]:
+                        cve_id = str(it.get("cve_id") or "").strip().upper()
+                        if args.dry_run:
+                            print(f"DRY RUN: would send {name} KEV alert for {cve_id}")
+                        else:
+                            rate_limit = {"discord": 0.5, "slack": 1.0, "teams": 0.5}.get(name, 0.5)
+                            time.sleep(rate_limit)
+                            item_changes = changes_by_cve.get(cve_id, (None, []))[1] if changes_by_cve else []
+                            provider.send_alert(it, item_changes)
+                            print(f"Sent {name} KEV alert for {cve_id}")
+                            if cve_id not in alerted_channels:
+                                alerted_channels[cve_id] = []
+                            alerted_channels[cve_id].append(name)
+                        sent += 1
+                    print(f"Sent {sent} {name} KEV alerts (first run).")
             elif changes_by_cve or args.force or args.no_state:
                 if args.summary_every_run:
                     provider.send_summary(items, repo, changes_by_cve if state else None)
