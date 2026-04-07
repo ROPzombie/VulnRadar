@@ -126,6 +126,7 @@ def build_radar_data(
     kev_by_cve: dict[str, dict[str, Any]],
     epss_by_cve: dict[str, float],
     patchthis_cves: set[str],
+    recent_nvd_by_cve: dict[str, dict[str, Any]],
     nvd_by_cve: dict[str, dict[str, Any]],
     min_year: int,
     max_year: int | None,
@@ -147,6 +148,7 @@ def build_radar_data(
         epss_by_cve: EPSS lookup dict.
         patchthis_cves: Set of CVE IDs with exploit intel.
         nvd_by_cve: NVD enrichment lookup dict.
+        recent_nvd_by_cve: NVD enrichment lookup dict.
         min_year: Minimum CVE year to scan.
         max_year: Maximum CVE year (None = current year).
         include_kev_outside_window: Whether to include KEV entries
@@ -278,6 +280,21 @@ def build_radar_data(
             }
 
         nvd = nvd_by_cve.get(cve_id)
+        if nvd:
+            if record.get("cvss_score") is None and nvd.get("cvss_v3_score"):
+                record["cvss_score"] = nvd["cvss_v3_score"]
+                record["cvss_severity"] = nvd.get("cvss_v3_severity")
+                record["cvss_vector"] = nvd.get("cvss_v3_vector")
+            record["nvd"] = {
+                "cvss_v3_score": nvd.get("cvss_v3_score"),
+                "cvss_v3_severity": nvd.get("cvss_v3_severity"),
+                "cvss_v2_score": nvd.get("cvss_v2_score"),
+                "cvss_v2_severity": nvd.get("cvss_v2_severity"),
+                "cwe_ids": nvd.get("cwe_ids"),
+                "cpe_count": nvd.get("cpe_count"),
+                "reference_count": nvd.get("reference_count"),
+            }
+        nvd = recent_nvd_by_cve.get(cve_id)
         if nvd:
             if record.get("cvss_score") is None and nvd.get("cvss_v3_score"):
                 record["cvss_score"] = nvd["cvss_v3_score"]

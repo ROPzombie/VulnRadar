@@ -21,6 +21,7 @@ from .downloaders import (
     download_bytes,
     download_cisa_kev,
     download_epss,
+    download_recent_nvd_feeds,
     download_nvd_feeds,
     download_patchthis,
     get_latest_cvelist_zip_url,
@@ -42,7 +43,7 @@ from .state import Change, StateManager
 
 def _default_min_year() -> int:
     """Inclusive lower bound year for the default scan window."""
-    return dt.datetime.now().year - 4
+    return dt.datetime.now().year - 0
 
 
 # ─── ETL CLI ──────────────────────────────────────────────────────────────────
@@ -61,7 +62,7 @@ def _handle_discovery_commands(args: argparse.Namespace) -> int:
         current_year = dt.datetime.now().year
         years = [current_year - 1, current_year]
 
-        print("Scanning CVE data (last 2 years)...")
+        print("Scanning CVE data (this year)...")
         all_vendors, all_products = extract_all_vendors_products(extracted, years)
         print(f"  Found {len(all_vendors)} unique vendors, {len(all_products)} unique products")
         print()
@@ -163,6 +164,7 @@ def main_etl(argv: Sequence[str] | None = None) -> int:
     parser.add_argument("--watchlist", default=None, help="Path to watchlist file (YAML or JSON)")
     parser.add_argument("--out", default="data/radar_data.json", help="Output JSON path")
     parser.add_argument("--report", default="data/radar_report.md", help="Output Markdown report path")
+    parser.add_argument("--latest-only", default=None, help="Latest CVEs 2hr cycle")
     parser.add_argument(
         "--min-year",
         type=int,
@@ -248,6 +250,10 @@ def main_etl(argv: Sequence[str] | None = None) -> int:
         else:
             print("Skipping NVD data feeds (--skip-nvd)")
 
+        recent_nvd_by_cve: dict[str, dict[str, Any]] = {}
+        print("Downloading recent NVD data feed...")
+        recent_nvd_by_cve = download_recent_nvd_feeds(session, cache_dir=nvd_cache)
+
         print("Downloading CVE List V5 bulk export...")
         zip_url = get_latest_cvelist_zip_url(session)
         zip_bytes = download_bytes(session, zip_url)
@@ -261,6 +267,7 @@ def main_etl(argv: Sequence[str] | None = None) -> int:
             kev_by_cve=kev_by_cve,
             epss_by_cve=epss_by_cve,
             patchthis_cves=patchthis_cves,
+            recent_nvd_by_cve=recent_nvd_by_cve,
             nvd_by_cve=nvd_by_cve,
             min_year=args.min_year,
             max_year=args.max_year,

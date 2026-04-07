@@ -150,6 +150,74 @@ async def _download_patchthis(session: aiohttp.ClientSession) -> set[str]:
             out.add(cve)
     return out
 
+async def _download_recent_nvd_feed(
+    session: aiohttp.ClientSession,
+    year: int,
+    cache_dir: Path | None,
+) -> dict[str, dict[str, Any]]:
+    """Download and parse a recent NVD feed."""
+    #https://nvd.nist.gov/feeds/json/cve/2.0/nvdcve-2.0-recent.json.gz
+    url = f"{NVD_FEED_BASE_URL}/nvdcve-2.0-recent.json.gz"
+    cache_file = cache_dir / f"nvdcve-2.0-recent.json.gz" if cache_dir else None
+    raw: bytes | None = None
+
+    if raw is None:
+        print(f"  Downloading recent NVD feed for...")
+        raw = await _fetch_bytes(session, url)
+        if cache_file:
+            cache_file.write_bytes(raw)
+
+    with gzip.GzipFile(fileobj=io.BytesIO(raw), mode="rb") as gz:
+        feed = json.loads(gz.read().decode("utf-8", errors="replace"))
+
+    nvd_data: dict[str, dict[str, Any]] = {}
+    for vuln in feed.get("vulnerabilities") or []:
+        cve_data = vuln.get("cve", {})
+        cve_id = (cve_data.get("id") or "").strip().upper()
+        if not cve_id.startswith("CVE-") or cve_data.get("vulnStatus") == "Rejected":
+            continue
+
+        metrics = cve_data.get("metrics", {})
+        cvss_v31 = metrics.get("cvssMetricV31", [])
+        cvss_v30 = metrics.get("cvssMetricV30", [])
+        cvss_v2 = metrics.get("cvssMetricV2", [])
+
+        def get_primary(metric_list: list) -> dict:
+            for m in metric_list:
+                if m.get("type") == "Primary":
+                    return m.get("cvssData", {})
+            return metric_list[0].get("cvssData", {}) if metric_list else {}
+
+        cvss3_data = get_primary(cvss_v31) or get_primary(cvss_v30)
+        cvss2_data = get_primary(cvss_v2)
+
+        cwe_ids = []
+        for weakness in cve_data.get("weaknesses", []):
+            for desc in weakness.get("description", []):
+                val = desc.get("value", "")
+                if val.startswith("CWE-") and val != "CWE-noinfo":
+                    cwe_ids.append(val)
+
+        cpe_count = sum(
+            len(node.get("cpeMatch", []))
+            for config in cve_data.get("configurations", [])
+            for node in config.get("nodes", [])
+        )
+
+        nvd_data[cve_id] = {
+            "cvss_v3_score": cvss3_data.get("baseScore"),
+            "cvss_v3_severity": cvss3_data.get("baseSeverity"),
+            "cvss_v3_vector": cvss3_data.get("vectorString"),
+            "cvss_v2_score": cvss2_data.get("baseScore"),
+            "cvss_v2_severity": cvss2_data.get("baseSeverity"),
+            "cvss_v2_vector": cvss2_data.get("vectorString"),
+            "cwe_ids": list(dict.fromkeys(cwe_ids))[:10] if cwe_ids else None,
+            "cpe_count": cpe_count,
+            "reference_count": len(cve_data.get("references", [])),
+        }
+
+    print(f"    Loaded {len(nvd_data)} recent CVEs from NVD {year} feed")
+    return nvd_data
 
 async def _download_nvd_feed(
     session: aiohttp.ClientSession,

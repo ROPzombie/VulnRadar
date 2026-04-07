@@ -25,6 +25,24 @@ vendors:
   - linux           # Linux kernel
   - cisco           # IOS, ASA, WebEx
   - vmware          # ESXi, vCenter, Horizon
+  - oracle
+  - citrix
+  - adobe
+  - hp
+  - atlassian
+  - check point
+  - ubuntu
+  - red hat
+  - bitwarden
+  - m-privacy
+  - checkmk
+  - dell
+  - Kofax
+  - Roxtra
+  - TeamViewer
+  - NT-ware
+  - Gingco.Net
+  - displayLink
   # - fortinet      # FortiGate, FortiOS
   # - paloaltonetworks  # Firewalls, GlobalProtect
 
@@ -34,12 +52,28 @@ vendors:
 products:
   - log4j           # Log4Shell - CVE-2021-44228 and related
   - chrome          # Google Chrome browser
-  # - firefox       # Mozilla Firefox
-  # - openssl       # Heartbleed and many others
-  # - exchange      # Microsoft Exchange (ProxyLogon, etc.)
-  # - jenkins       # CI/CD server
-  # - kubernetes    # K8s
-  # - docker        # Docker Engine
+  - firefox         # Mozilla Firefox
+  - openssl         # Heartbleed and many others
+  - exchange        # Microsoft Exchange (ProxyLogon, etc.)
+  - jenkins         # CI/CD server
+  - kubernetes      # K8s
+  - docker          # Docker Engine
+  - word viewer
+  - citrix receiver
+  - Citrix Web Helper
+  - Citrix WorkSpace
+  - Atlassian Companion
+  - Atlassian confluence
+  - checkmk agent
+  - notepad++
+  - webex
+  - deviceTRUST
+  - AppProtection 
+  - TeamViewer
+  - uniFLOW
+  - gingco share
+  -
+  
 
 # ============================================================================
 # EXCLUSIONS - Filter out noise (optional)
@@ -57,7 +91,7 @@ exclude_products:
 # THRESHOLDS - Minimum severity to include (optional)
 # ============================================================================
 thresholds:
-  min_cvss: 7.0         # High+ severity only (keeps file size manageable)
+  min_cvss: 0.0         # High+ severity only (keeps file size manageable)
   # min_epss: 0.0       # 0.0 = all, 0.1 = 10%+ exploit probability
 
 # ============================================================================
@@ -67,3 +101,17 @@ thresholds:
 #   always_include_kev: true       # Include CISA KEV even if not in watchlist
 #   always_include_patchthis: true # Include PatchThis items
 #   match_mode: substring          # 'substring', 'exact', or 'regex'
+
+# ============================================================================
+# NOTIFICATIONS - Microsoft Teams (Optional)
+# ============================================================================
+#notifications:
+#  discord:
+#    - url: $DISCORD_CRITICAL_WEBHOOK
+#      filter: critical        # Only critical findings
+#      max_alerts: 25
+#    - url: $DISCORD_ALL_WEBHOOK
+#      filter: all             # Everything
+#  slack:
+#    - url: $SLACK_WEBHOOK_URL
+#      filter: kev             # Only KEV entries

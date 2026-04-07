@@ -27,6 +27,7 @@ CISA_KEV_URL = "https://www.cisa.gov/sites/default/files/feeds/known_exploited_v
 EPSS_CURRENT_CSV_GZ_URL = "https://epss.empiricalsecurity.com/epss_scores-current.csv.gz"
 PATCHTHIS_CSV_URL = "https://raw.githubusercontent.com/RogoLabs/patchthisapp/main/web/data.csv"
 NVD_FEED_BASE_URL = "https://nvd.nist.gov/feeds/json/cve/2.0"
+NVD_FEED_LATEST_URL = "https://nvd.nist.gov/feeds/json/cve/2.0"
 
 DEFAULT_HTTP_TIMEOUT = (10, 120)  # (connect, read)
 
@@ -389,5 +390,115 @@ def download_nvd_feeds(
             count += 1
 
         print(f"    Loaded {count} CVEs from NVD {year} feed")
+
+    return nvd_data
+
+def download_recent_nvd_feeds(
+    session: requests.Session,
+    cache_dir: Path | None = None,
+) -> dict[str, dict[str, Any]]:
+    """Download NVD JSON 2.0 data feeds for the specified years.
+
+    If ``cache_dir`` is provided, feeds are cached and reused when
+    the cache is less than 24 hours old.
+
+    Args:
+        session: Requests session.
+        years: List of CVE years to download.
+        cache_dir: Optional directory for caching feeds.
+
+    Returns:
+        Dict mapping CVE ID to NVD enrichment data (CVSS, CWE, CPE).
+            #https://nvd.nist.gov/feeds/json/cve/2.0/nvdcve-2.0-recent.json.gz
+
+    """
+    nvd_data: dict[str, dict[str, Any]] = {}
+    
+
+    if cache_dir:
+        cache_dir.mkdir(parents=True, exist_ok=True)
+
+    
+    url = f"{NVD_FEED_BASE_URL}/nvdcve-2.0-recent.json.gz"
+    cache_file = cache_dir / f"nvdcve-2.0-recent.json.gz" if cache_dir else None
+    raw = None
+
+    # Check cache first
+    if cache_file and cache_file.exists():
+        cache_age = dt.datetime.now().timestamp() - cache_file.stat().st_mtime
+        if cache_age < 7200:
+            print(f"  Using recent cached NVD (age: {cache_age / 3600:.1f}h)")
+            raw = cache_file.read_bytes()
+
+    if raw is None:
+        print(f"  Downloading recent NVD feed...")
+        try:
+            resp = session.get(url, timeout=(10, 300), headers={"Accept": "*/*"})
+            resp.raise_for_status()
+            raw = resp.content
+            if cache_file:
+                cache_file.write_bytes(raw)
+                print(f"    Cached recent NVD")
+        except Exception as e:
+            print(f"    Warning: Failed to download recent NVD: {e}")
+
+    try:
+        with gzip.GzipFile(fileobj=io.BytesIO(raw), mode="rb") as gz:
+            feed = json.loads(gz.read().decode("utf-8", errors="replace"))
+    except Exception as e:
+        print(f"    Warning: Failed to parse recent NVD feed: {e}")
+
+    vulnerabilities = feed.get("vulnerabilities") or []
+    count = 0
+    for vuln in vulnerabilities:
+        cve_data = vuln.get("cve", {})
+        cve_id = (cve_data.get("id") or "").strip().upper()
+        if not cve_id.startswith("CVE-"):
+            continue
+        if cve_data.get("vulnStatus") == "Rejected":
+            continue
+
+        metrics = cve_data.get("metrics", {})
+        cvss_v31 = metrics.get("cvssMetricV31", [])
+        cvss_v30 = metrics.get("cvssMetricV30", [])
+        cvss_v2 = metrics.get("cvssMetricV2", [])
+
+        def get_primary_cvss(metric_list: list) -> dict:
+            for m in metric_list:
+                if m.get("type") == "Primary":
+                    return m.get("cvssData", {})
+            return metric_list[0].get("cvssData", {}) if metric_list else {}
+
+        cvss3_data = get_primary_cvss(cvss_v31) or get_primary_cvss(cvss_v30)
+        cvss2_data = get_primary_cvss(cvss_v2)
+
+        cwe_ids = []
+        for weakness in cve_data.get("weaknesses", []):
+            for desc in weakness.get("description", []):
+                val = desc.get("value", "")
+                if val.startswith("CWE-") and val != "CWE-noinfo":
+                    cwe_ids.append(val)
+
+        cpe_count = 0
+        for config in cve_data.get("configurations", []):
+            for node in config.get("nodes", []):
+                cpe_count += len(node.get("cpeMatch", []))
+
+        ref_count = len(cve_data.get("references", []))
+
+        nvd_data[cve_id] = {
+            "cvss_v3_score": cvss3_data.get("baseScore"),
+            "cvss_v3_severity": cvss3_data.get("baseSeverity"),
+            "cvss_v3_vector": cvss3_data.get("vectorString"),
+            "cvss_v2_score": cvss2_data.get("baseScore"),
+            "cvss_v2_severity": cvss2_data.get("baseSeverity"),
+            "cvss_v2_vector": cvss2_data.get("vectorString"),
+            "cwe_ids": list(dict.fromkeys(cwe_ids))[:10] if cwe_ids else None,
+            "cpe_count": cpe_count,
+            "reference_count": ref_count,
+        }
+        count += 1
+
+    print(f"    Loaded {count} recent CVEs from NVD feed")
 
     return nvd_data
