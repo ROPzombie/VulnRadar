@@ -1,0 +1,51 @@
+{
+  "generated_at": "2026-04-08T05:46:40+00:00",
+  "total_count": 2035,
+  "vendor_count": 11,
+  "vendors": {
+    "_other": {
+      "file": "vendors/_other.json",
+      "count": 247
+    },
+    "adobe": {
+      "file": "vendors/adobe.json",
+      "count": 150
+    },
+    "apple": {
+      "file": "vendors/apple.json",
+      "count": 153
+    },
+    "cisco": {
+      "file": "vendors/cisco.json",
+      "count": 116
+    },
+    "dell": {
+      "file": "vendors/dell.json",
+      "count": 58
+    },
+    "google": {
+      "file": "vendors/google.json",
+      "count": 182
+    },
+    "linux": {
+      "file": "vendors/linux.json",
+      "count": 522
+    },
+    "microsoft": {
+      "file": "vendors/microsoft.json",
+      "count": 296
+    },
+    "mozilla": {
+      "file": "vendors/mozilla.json",
+      "count": 125
+    },
+    "oracle_corporation": {
+      "file": "vendors/oracle_corporation.json",
+      "count": 69
+    },
+    "red_hat": {
+      "file": "vendors/red_hat.json",
+      "count": 117
+    }
+  }
+}
