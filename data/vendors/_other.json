@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-08T11:11:57+00:00",
+  "generated_at": "2026-04-08T13:58:21+00:00",
   "vendor": "_other",
   "count": 247,
   "items": [
@@ -2994,7 +2994,7 @@
         "vendor:checkmk gmbh"
       ],
       "active_threat": false,
-      "probability_score": 0.00043,
+      "probability_score": 0.00046,
       "nvd": {
         "cvss_v3_score": 8.8,
         "cvss_v3_severity": "HIGH",
@@ -3259,7 +3259,7 @@
         "vendor:checkmk gmbh"
       ],
       "active_threat": false,
-      "probability_score": null,
+      "probability_score": 0.00047,
       "nvd": {
         "cvss_v3_score": null,
         "cvss_v3_severity": null,
@@ -4233,7 +4233,7 @@
       "priority_label": "",
       "matched_terms": [],
       "active_threat": true,
-      "probability_score": 0.0022,
+      "probability_score": 0.00235,
       "kev": {
         "cveID": "CVE-2026-21385",
         "vendorProject": "Qualcomm",
@@ -5170,7 +5170,7 @@
         "vendor:apache software foundation"
       ],
       "active_threat": false,
-      "probability_score": 0.00026,
+      "probability_score": 0.00029,
       "nvd": {
         "cvss_v3_score": 7.4,
         "cvss_v3_severity": "HIGH",
@@ -5220,7 +5220,7 @@
         "vendor:apache software foundation"
       ],
       "active_threat": false,
-      "probability_score": 0.00021,
+      "probability_score": 0.00024,
       "nvd": {
         "cvss_v3_score": 7.5,
         "cvss_v3_severity": "HIGH",
@@ -5832,7 +5832,7 @@
         "vendor:apache software foundation"
       ],
       "active_threat": false,
-      "probability_score": null,
+      "probability_score": 0.00023,
       "nvd": {
         "cvss_v3_score": 8.8,
         "cvss_v3_severity": "HIGH",
@@ -5875,7 +5875,7 @@
         "vendor:apache software foundation"
       ],
       "active_threat": false,
-      "probability_score": null,
+      "probability_score": 0.00017,
       "nvd": {
         "cvss_v3_score": null,
         "cvss_v3_severity": null,
@@ -6115,7 +6115,7 @@
         "vendor:apache software foundation"
       ],
       "active_threat": false,
-      "probability_score": null,
+      "probability_score": 0.00018,
       "nvd": {
         "cvss_v3_score": null,
         "cvss_v3_severity": null,
@@ -6320,7 +6320,7 @@
         "vendor:apache software foundation"
       ],
       "active_threat": false,
-      "probability_score": 0.00036,
+      "probability_score": 0.00044,
       "nvd": {
         "cvss_v3_score": 4.3,
         "cvss_v3_severity": "MEDIUM",
@@ -6379,16 +6379,16 @@
       ],
       "watchlist_hit": true,
       "in_watchlist": true,
-      "in_patchthis": false,
-      "is_critical": false,
-      "priority_label": "",
+      "in_patchthis": true,
+      "is_critical": true,
+      "priority_label": "CRITICAL (Active Exploit in Stack)",
       "matched_terms": [
         "product:apache activemq",
         "product:apache activemq broker",
         "vendor:apache software foundation"
       ],
       "active_threat": false,
-      "probability_score": 0.0006,
+      "probability_score": 0.00104,
       "nvd": {
         "cvss_v3_score": 8.8,
         "cvss_v3_severity": "HIGH",
@@ -6444,7 +6444,7 @@
         "vendor:apache software foundation"
       ],
       "active_threat": false,
-      "probability_score": null,
+      "probability_score": 0.00028,
       "nvd": {
         "cvss_v3_score": 8.7,
         "cvss_v3_severity": "HIGH",
@@ -6860,7 +6860,7 @@
         "vendor:nextcloud"
       ],
       "active_threat": false,
-      "probability_score": null,
+      "probability_score": 0.0025,
       "nvd": {
         "cvss_v3_score": 8.8,
         "cvss_v3_severity": "HIGH",
@@ -6943,7 +6943,7 @@
         "vendor:nextcloud"
       ],
       "active_threat": false,
-      "probability_score": null,
+      "probability_score": 0.00059,
       "nvd": {
         "cvss_v3_score": 9.9,
         "cvss_v3_severity": "CRITICAL",
@@ -7205,7 +7205,7 @@
         "vendor:vmware"
       ],
       "active_threat": true,
-      "probability_score": 0.02066,
+      "probability_score": 0.02321,
       "kev": {
         "cveID": "CVE-2026-22719",
         "vendorProject": "Broadcom",
@@ -7963,7 +7963,7 @@
         "vendor:openssl"
       ],
       "active_threat": false,
-      "probability_score": null,
+      "probability_score": 0.00019,
       "nvd": {
         "cvss_v3_score": null,
         "cvss_v3_severity": null,
@@ -8036,7 +8036,7 @@
         "vendor:openssl"
       ],
       "active_threat": false,
-      "probability_score": null,
+      "probability_score": 0.0002,
       "nvd": {
         "cvss_v3_score": null,
         "cvss_v3_severity": null,
@@ -8115,7 +8115,7 @@
         "vendor:openssl"
       ],
       "active_threat": false,
-      "probability_score": null,
+      "probability_score": 0.00011,
       "nvd": {
         "cvss_v3_score": null,
         "cvss_v3_severity": null,
@@ -8194,7 +8194,7 @@
         "vendor:openssl"
       ],
       "active_threat": false,
-      "probability_score": null,
+      "probability_score": 0.00029,
       "nvd": {
         "cvss_v3_score": null,
         "cvss_v3_severity": null,
@@ -8273,7 +8273,7 @@
         "vendor:openssl"
       ],
       "active_threat": false,
-      "probability_score": null,
+      "probability_score": 0.00029,
       "nvd": {
         "cvss_v3_score": null,
         "cvss_v3_severity": null,
@@ -8389,7 +8389,7 @@
         "vendor:openssl"
       ],
       "active_threat": false,
-      "probability_score": null,
+      "probability_score": 0.00011,
       "nvd": {
         "cvss_v3_score": null,
         "cvss_v3_severity": null,
@@ -8456,7 +8456,7 @@
         "vendor:openssl"
       ],
       "active_threat": false,
-      "probability_score": null,
+      "probability_score": 0.00012,
       "nvd": {
         "cvss_v3_score": null,
         "cvss_v3_severity": null,
@@ -10042,7 +10042,7 @@
         "vendor:hewlett packard enterprise (hpe)"
       ],
       "active_threat": false,
-      "probability_score": null,
+      "probability_score": 0.00038,
       "nvd": {
         "cvss_v3_score": 8.8,
         "cvss_v3_severity": "HIGH",
@@ -10127,7 +10127,7 @@
       "priority_label": "",
       "matched_terms": [],
       "active_threat": true,
-      "probability_score": 0.77916,
+      "probability_score": 0.79546,
       "kev": {
         "cveID": "CVE-2026-23760",
         "vendorProject": "SmarterTools",
@@ -10412,7 +10412,7 @@
       "priority_label": "",
       "matched_terms": [],
       "active_threat": true,
-      "probability_score": 0.02162,
+      "probability_score": 0.02761,
       "kev": {
         "cveID": "CVE-2026-24858",
         "vendorProject": "Fortinet",
@@ -11418,7 +11418,7 @@
         "vendor:pi-hole"
       ],
       "active_threat": false,
-      "probability_score": 0.00826,
+      "probability_score": 0.00244,
       "nvd": {
         "cvss_v3_score": null,
         "cvss_v3_severity": null,
@@ -12635,7 +12635,7 @@
         "vendor:thephpleague"
       ],
       "active_threat": false,
-      "probability_score": 0.00035,
+      "probability_score": 0.00041,
       "nvd": {
         "cvss_v3_score": 6.1,
         "cvss_v3_severity": "MEDIUM",
@@ -12944,7 +12944,7 @@
         "vendor:vshakitskiy"
       ],
       "active_threat": false,
-      "probability_score": 0.00029,
+      "probability_score": 0.00038,
       "nvd": {
         "cvss_v3_score": 5.3,
         "cvss_v3_severity": "MEDIUM",
@@ -13723,7 +13723,7 @@
         "vendor:suvarchal"
       ],
       "active_threat": false,
-      "probability_score": null,
+      "probability_score": 0.01039,
       "nvd": {
         "cvss_v3_score": 7.3,
         "cvss_v3_severity": "HIGH",

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-08T11:11:57+00:00",
+  "generated_at": "2026-04-08T13:58:21+00:00",
   "vendor": "apple",
   "count": 153,
   "items": [
@@ -6363,7 +6363,7 @@
         "vendor:apple"
       ],
       "active_threat": true,
-      "probability_score": 0.00302,
+      "probability_score": 0.00392,
       "kev": {
         "cveID": "CVE-2026-20700",
         "vendorProject": "Apple",
