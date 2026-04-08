@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-08T09:17:04+00:00",
+  "generated_at": "2026-04-08T11:11:57+00:00",
   "vendor": "_other",
   "count": 247,
   "items": [
@@ -3269,7 +3269,7 @@
           "CWE-79"
         ],
         "cpe_count": 0,
-        "reference_count": 1
+        "reference_count": 2
       }
     },
     {
