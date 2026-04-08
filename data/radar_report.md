@@ -1,6 +1,6 @@
 # VulnRadar Report
 
-Generated: `2026-04-07T19:24:58+00:00`
+Generated: `2026-04-08T05:01:10+00:00`
 
 ## Executive Summary
 
@@ -32,8 +32,8 @@ Top critical items:
 
 ## Summary
 
-- Total items: **2009**
-- Watchlist hits: **1995**
+- Total items: **2035**
+- Watchlist hits: **2021**
 - CISA KEVs: **33**
 - Exploit Intel (PoC): **33**
 - Exploit Intel + Watchlist (CRITICAL): **19**
@@ -79,6 +79,7 @@ Top critical items:
 | [CVE-2026-2761](https://www.cve.org/CVERecord?id=CVE-2026-2761) |  | Critical CVSS |  |  |  | 0.001 | 10.0 | ✅ | Sandbox escape in the Graphics: WebRender component. This vulnerability affects Firefox < 148, Firefox ESR < 115.33, Firefox ESR < 140.8, Thunderbird < 148, an… |
 | [CVE-2026-2768](https://www.cve.org/CVERecord?id=CVE-2026-2768) |  | Critical CVSS |  |  |  | 0.001 | 10.0 | ✅ | Sandbox escape in the Storage: IndexedDB component. This vulnerability affects Firefox < 148, Firefox ESR < 140.8, Thunderbird < 148, and Thunderbird < 140.8. |
 | [CVE-2026-26030](https://www.cve.org/CVERecord?id=CVE-2026-26030) |  | Critical CVSS |  |  |  | 0.001 | 10.0 | ✅ | Semantic Kernel, Microsoft's semantic kernel Python SDK, has a remote code execution vulnerability in versions prior to 1.39.4, specifically within the `InMemo… |
+| [CVE-2026-32186](https://www.cve.org/CVERecord?id=CVE-2026-32186) |  | Critical CVSS |  |  |  | 0.001 | 10.0 | ✅ | Server-side request forgery (ssrf) in Microsoft Bing allows an unauthorized attacker to elevate privileges over a network. |
 | [CVE-2026-32169](https://www.cve.org/CVERecord?id=CVE-2026-32169) |  | Critical CVSS |  |  |  | 0.001 | 10.0 | ✅ | Server-side request forgery (ssrf) in Azure Cloud Shell allows an unauthorized attacker to elevate privileges over a network. |
 | [CVE-2026-2760](https://www.cve.org/CVERecord?id=CVE-2026-2760) |  | Critical CVSS |  |  |  | 0.001 | 10.0 | ✅ | Sandbox escape due to incorrect boundary conditions in the Graphics: WebRender component. This vulnerability affects Firefox < 148, Firefox ESR < 115.33, Firef… |
 | [CVE-2026-2776](https://www.cve.org/CVERecord?id=CVE-2026-2776) |  | Critical CVSS |  |  |  | 0.001 | 10.0 | ✅ | Sandbox escape due to incorrect boundary conditions in the Telemetry component in External Software. This vulnerability affects Firefox < 148, Firefox ESR < 11… |
@@ -118,7 +119,6 @@ Top critical items:
 | [CVE-2026-21994](https://www.cve.org/CVERecord?id=CVE-2026-21994) |  | Critical CVSS |  |  |  | 0.001 | 9.8 | ✅ | Vulnerability in the Oracle Edge Cloud Infrastructure Designer and Visualisation Toolkit product of Oracle Open Source Projects (component: Desktop).   The sup… |
 | [CVE-2026-32191](https://www.cve.org/CVERecord?id=CVE-2026-32191) |  | Critical CVSS |  |  |  | 0.001 | 9.8 | ✅ | Improper neutralization of special elements used in an os command ('os command injection') in Microsoft Bing Images allows an unauthorized attacker to execute … |
 | [CVE-2026-32194](https://www.cve.org/CVERecord?id=CVE-2026-32194) |  | Critical CVSS |  |  |  | 0.001 | 9.8 | ✅ | Improper neutralization of special elements used in a command ('command injection') in Microsoft Bing Images allows an unauthorized attacker to execute code ov… |
-| [CVE-2026-32186](https://www.cve.org/CVERecord?id=CVE-2026-32186) |  | Critical CVSS |  |  |  | 0.001 | 9.8 | ✅ | Microsoft Bing Elevation of Privilege Vulnerability |
 | [CVE-2026-2796](https://www.cve.org/CVERecord?id=CVE-2026-2796) |  | Critical CVSS |  |  |  | 0.001 | 9.8 | ✅ | JIT miscompilation in the JavaScript: WebAssembly component. This vulnerability affects Firefox < 148 and Thunderbird < 148. |
 | [CVE-2026-2793](https://www.cve.org/CVERecord?id=CVE-2026-2793) |  | Critical CVSS |  |  |  | 0.001 | 9.8 | ✅ | Memory safety bugs present in Firefox ESR 115.32, Firefox ESR 140.7, Thunderbird ESR 140.7, Firefox 147 and Thunderbird 147. Some of these bugs showed evidence… |
 | [CVE-2026-2792](https://www.cve.org/CVERecord?id=CVE-2026-2792) |  | Critical CVSS |  |  |  | 0.001 | 9.8 | ✅ | Memory safety bugs present in Firefox ESR 140.7, Thunderbird ESR 140.7, Firefox 147 and Thunderbird 147. Some of these bugs showed evidence of memory corruptio… |
@@ -187,6 +187,10 @@ Top critical items:
 | [CVE-2026-4723](https://www.cve.org/CVERecord?id=CVE-2026-4723) |  | Critical CVSS |  |  |  | 0.000 | 9.8 | ✅ | Use-after-free in the JavaScript Engine component. This vulnerability affects Firefox < 149 and Thunderbird < 149. |
 | [CVE-2026-4729](https://www.cve.org/CVERecord?id=CVE-2026-4729) |  | Critical CVSS |  |  |  | 0.000 | 9.8 | ✅ | Memory safety bugs present in Firefox 148 and Thunderbird 148. Some of these bugs showed evidence of memory corruption and we presume that with enough effort s… |
 | [CVE-2026-2780](https://www.cve.org/CVERecord?id=CVE-2026-2780) |  | Critical CVSS |  |  |  | 0.000 | 9.8 | ✅ | Privilege escalation in the Netmonitor component. This vulnerability affects Firefox < 148, Firefox ESR < 140.8, Thunderbird < 148, and Thunderbird < 140.8. |
+| [CVE-2026-4631](https://www.cve.org/CVERecord?id=CVE-2026-4631) |  | Critical CVSS |  |  |  |  | 9.8 | ✅ | Cockpit's remote login feature passes user-supplied hostnames and usernames from the web interface to the SSH client without validation or sanitization. An att… |
+| [CVE-2026-5731](https://www.cve.org/CVERecord?id=CVE-2026-5731) |  | Critical CVSS |  |  |  |  | 9.8 | ✅ | Memory safety bugs present in Firefox ESR 115.34.0, Firefox ESR 140.9.0, Thunderbird ESR 140.9.0, Firefox 149.0.1 and Thunderbird 149.0.1. Some of these bugs s… |
+| [CVE-2026-5734](https://www.cve.org/CVERecord?id=CVE-2026-5734) |  | Critical CVSS |  |  |  |  | 9.8 | ✅ | Memory safety bugs present in Firefox ESR 140.9.0, Thunderbird ESR 140.9.0, Firefox 149.0.1 and Thunderbird 149.0.1. Some of these bugs showed evidence of memo… |
+| [CVE-2026-5735](https://www.cve.org/CVERecord?id=CVE-2026-5735) |  | Critical CVSS |  |  |  |  | 9.8 | ✅ | Memory safety bugs present in Firefox 149.0.1 and Thunderbird 149.0.1. Some of these bugs showed evidence of memory corruption and we presume that with enough … |
 | [CVE-2026-3545](https://www.cve.org/CVERecord?id=CVE-2026-3545) |  | Critical CVSS |  |  |  | 0.001 | 9.6 | ✅ | Insufficient data validation in Navigation in Google Chrome prior to 145.0.7632.159 allowed a remote attacker to potentially perform a sandbox escape via a cra… |
 | [CVE-2026-3916](https://www.cve.org/CVERecord?id=CVE-2026-3916) |  | Critical CVSS |  |  |  | 0.001 | 9.6 | ✅ | Out of bounds read in Web Speech in Google Chrome prior to 146.0.7680.71 allowed a remote attacker to potentially perform a sandbox escape via a crafted HTML p… |
 | [CVE-2026-5289](https://www.cve.org/CVERecord?id=CVE-2026-5289) |  | Critical CVSS |  |  |  | 0.001 | 9.6 | ✅ | Use after free in Navigation in Google Chrome prior to 146.0.7680.178 allowed a remote attacker who had compromised the renderer process to potentially perform… |
@@ -194,6 +198,7 @@ Top critical items:
 | [CVE-2026-5288](https://www.cve.org/CVERecord?id=CVE-2026-5288) |  | Critical CVSS |  |  |  | 0.001 | 9.6 | ✅ | Use after free in WebView in Google Chrome on Android prior to 146.0.7680.178 allowed a remote attacker who had compromised the renderer process to potentially… |
 | [CVE-2026-26135](https://www.cve.org/CVERecord?id=CVE-2026-26135) |  | Critical CVSS |  |  |  | 0.000 | 9.6 | ✅ | Server-side request forgery (ssrf) in Azure Custom Locations Resource Provider (RP) allows an authorized attacker to elevate privileges over a network. |
 | [CVE-2026-1709](https://www.cve.org/CVERecord?id=CVE-2026-1709) |  | Critical CVSS |  |  |  | 0.000 | 9.4 | ✅ | A flaw was found in Keylime. The Keylime registrar, since version 7.12.0, does not enforce client-side Transport Layer Security (TLS) authentication. This auth… |
+| [CVE-2026-23696](https://www.cve.org/CVERecord?id=CVE-2026-23696) |  | Critical CVSS |  |  |  |  | 9.4 | ✅ | Windmill CE and EE versions 1.276.0 through 1.603.2 contain an SQL injection vulnerability in the folder ownership management functionality that allows authent… |
 | [CVE-2026-27446](https://www.cve.org/CVERecord?id=CVE-2026-27446) |  | Critical CVSS |  |  |  | 0.001 | 9.3 | ✅ | Missing Authentication for Critical Function (CWE-306) vulnerability in Apache Artemis, Apache ActiveMQ Artemis. An unauthenticated remote attacker can use the… |
 | [CVE-2026-24307](https://www.cve.org/CVERecord?id=CVE-2026-24307) |  | Critical CVSS |  |  |  | 0.001 | 9.3 | ✅ | Improper validation of specified type of input in M365 Copilot allows an unauthorized attacker to disclose information over a network. |
 | [CVE-2026-24305](https://www.cve.org/CVERecord?id=CVE-2026-24305) |  | Critical CVSS |  |  |  | 0.001 | 9.3 | ✅ | Azure Entra ID Elevation of Privilege Vulnerability |
@@ -237,8 +242,3 @@ Top critical items:
 | [CVE-2026-4679](https://www.cve.org/CVERecord?id=CVE-2026-4679) |  | Other |  |  |  | 0.001 | 8.8 | ✅ | Integer overflow in Fonts in Google Chrome prior to 146.0.7680.165 allowed a remote attacker to perform an out of bounds memory write via a crafted HTML page. … |
 | [CVE-2026-3918](https://www.cve.org/CVERecord?id=CVE-2026-3918) |  | Other |  |  |  | 0.001 | 8.8 | ✅ | Use after free in WebMCP in Google Chrome prior to 146.0.7680.71 allowed a remote attacker to potentially exploit heap corruption via a crafted HTML page. (Chr… |
 | [CVE-2026-3923](https://www.cve.org/CVERecord?id=CVE-2026-3923) |  | Other |  |  |  | 0.001 | 8.8 | ✅ | Use after free in WebMIDI in Google Chrome prior to 146.0.7680.71 allowed a remote attacker to potentially exploit heap corruption via a crafted HTML page. (Ch… |
-| [CVE-2026-3936](https://www.cve.org/CVERecord?id=CVE-2026-3936) |  | Other |  |  |  | 0.001 | 8.8 | ✅ | Use after free in WebView in Google Chrome on Android prior to 146.0.7680.71 allowed a remote attacker to potentially exploit heap corruption via a crafted HTM… |
-| [CVE-2026-0902](https://www.cve.org/CVERecord?id=CVE-2026-0902) |  | Other |  |  |  | 0.001 | 8.8 | ✅ | Inappropriate implementation in V8 in Google Chrome prior to 144.0.7559.59 allowed a remote attacker to perform an out of bounds memory read via a crafted HTML… |
-| [CVE-2026-20967](https://www.cve.org/CVERecord?id=CVE-2026-20967) |  | Other |  |  |  | 0.001 | 8.8 | ✅ | Improper input validation in System Center Operations Manager allows an authorized attacker to elevate privileges over a network. |
-| [CVE-2026-26106](https://www.cve.org/CVERecord?id=CVE-2026-26106) |  | Other |  |  |  | 0.001 | 8.8 | ✅ | Improper input validation in Microsoft Office SharePoint allows an authorized attacker to execute code over a network. |
-| [CVE-2026-26115](https://www.cve.org/CVERecord?id=CVE-2026-26115) |  | Other |  |  |  | 0.001 | 8.8 | ✅ | Improper validation of specified type of input in SQL Server allows an authorized attacker to elevate privileges over a network. |
