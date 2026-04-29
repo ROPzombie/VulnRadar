@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-08T05:46:40+00:00",
+  "generated_at": "2026-04-08T15:23:54+00:00",
   "vendor": "dell",
   "count": 58,
   "items": [
@@ -76,7 +76,7 @@
         "vendor:dell"
       ],
       "active_threat": false,
-      "probability_score": 0.00014,
+      "probability_score": 0.00016,
       "nvd": {
         "cvss_v3_score": 7.8,
         "cvss_v3_severity": "HIGH",
@@ -935,7 +935,7 @@
         "vendor:dell"
       ],
       "active_threat": false,
-      "probability_score": 0.00014,
+      "probability_score": 0.00016,
       "nvd": {
         "cvss_v3_score": 7.8,
         "cvss_v3_severity": "HIGH",
@@ -2547,7 +2547,7 @@
         "vendor:dell"
       ],
       "active_threat": false,
-      "probability_score": 0.00051,
+      "probability_score": 0.00059,
       "nvd": {
         "cvss_v3_score": 5.3,
         "cvss_v3_severity": "MEDIUM",
